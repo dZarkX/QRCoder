@@ -170,6 +170,7 @@ md-outlined-button {
   font-size: 13px;
   border-radius: 8px;
   min-height: 36px;
+  flex-shrink: 0;
 }
 
 .previewWrap {
@@ -191,6 +192,7 @@ md-outlined-button {
   flex-direction: column;
   gap: 10px;
   padding-top: 4px;
+  max-width: 210px;
 }
 
 .actionTitle {
