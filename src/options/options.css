@@ -33,6 +33,19 @@
   --error: #d93025;
   --shadow: light-dark(0 2px 8px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.32));
   --font-mono: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+
+  /* Material Web typography tokens (prevents fallback fonts inside shadow DOM) */
+  --md-ref-typeface-plain: var(--font-mono);
+  --md-ref-typeface-brand: var(--font-mono);
+  --md-sys-typescale-body-large-font-family: var(--font-mono);
+  --md-sys-typescale-body-medium-font-family: var(--font-mono);
+  --md-sys-typescale-body-small-font-family: var(--font-mono);
+  --md-sys-typescale-label-large-font-family: var(--font-mono);
+  --md-sys-typescale-label-medium-font-family: var(--font-mono);
+  --md-sys-typescale-label-small-font-family: var(--font-mono);
+  --md-sys-typescale-title-large-font-family: var(--font-mono);
+  --md-sys-typescale-title-medium-font-family: var(--font-mono);
+  --md-sys-typescale-title-small-font-family: var(--font-mono);
 }
 
 html,

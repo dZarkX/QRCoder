@@ -11,7 +11,7 @@ UI uses Material Design 3.
 !For Design details - see SKILL.md!
 
 ## Current Version
-0.1.1
+0.1.2
 
 ## Version History
 - 0.1.0
@@ -36,6 +36,7 @@ UI uses Material Design 3.
     - Right-click download: right-click QR preview downloads PNG; Shift+right-click downloads SVG.
     - Color pickers: switched to native `<input type="color">` for reliable visibility.
     - Font: JetBrains Mono is now the primary font for popup + options UI.
+    - Font in MD components: set Material Web typography tokens so buttons/inputs/selects consistently use JetBrains Mono.
 
 ## Completed Features
 - Project scaffolding: `package.json`, `tsconfig.json`, `vite.config.ts`
