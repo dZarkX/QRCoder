@@ -59,8 +59,6 @@ body {
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 520px;
-  height: 600px;
   overflow: hidden;
 }
 
@@ -71,9 +69,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: 600px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  max-height: 600px;
+  overflow: auto;
 }
 
 /* Prevent "window stretching" caused by long content */
@@ -114,7 +111,7 @@ body {
 
 .topGrid {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   align-items: center;
 }
@@ -184,7 +181,7 @@ md-outlined-button {
 
 .previewRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 210px;
+  grid-template-columns: 1fr 210px;
   gap: 14px;
   align-items: start;
 }
@@ -194,13 +191,6 @@ md-outlined-button {
   flex-direction: column;
   gap: 10px;
   padding-top: 4px;
-  min-width: 0;
-}
-
-.previewActions md-outlined-select,
-.previewActions md-outlined-text-field,
-.previewActions md-outlined-button {
-  width: 100%;
 }
 
 .actionTitle {
@@ -223,13 +213,9 @@ md-outlined-button {
 
 .sizeRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 72px;
+  grid-template-columns: 1fr 84px;
   gap: 8px;
   align-items: end;
-}
-
-.sizeRow md-outlined-text-field {
-  width: 100%;
 }
 
 .qrMount {
@@ -242,6 +228,8 @@ md-outlined-button {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
   box-shadow: var(--shadow);
 }
 
@@ -254,17 +242,17 @@ md-outlined-button {
   border-radius: 8px;
   background: var(--surface-elevated);
   color: var(--text);
-  border: 1px solid var(--border);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 160ms ease;
   font-size: 13px;
-  font-weight: 500;
-  box-shadow: var(--shadow);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1000;
 }
 
 .snackbar.show {
   opacity: 0.96;
+  transform: translateY(0);
 }
 
 /* Customization panel */
@@ -274,7 +262,8 @@ md-outlined-button {
 }
 
 .customize[open] {
-  overflow: hidden;
+  overflow: auto;
+  max-height: 360px;
 }
 
 .customizeSummary {
@@ -298,14 +287,6 @@ md-outlined-button {
 
 .customize > .group {
   margin-top: 14px;
-}
-
-.customize[open] {
-  max-height: 360px;
-}
-
-.customize[open] {
-  overflow: auto;
 }
 
 .colorField {
