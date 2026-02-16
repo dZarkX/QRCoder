@@ -17,8 +17,8 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       input: {
-        popup: path.resolve(__dirname, 'src/popup/popup.html'),
-        options: path.resolve(__dirname, 'src/options/options.html'),
+        popup: path.resolve(__dirname, 'popup.html'),
+        options: path.resolve(__dirname, 'options.html'),
         background: path.resolve(__dirname, 'src/background/background.ts'),
         content: path.resolve(__dirname, 'src/content/content.ts')
       },
