@@ -1,174 +1,157 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Generator</title>
-    <link rel="stylesheet" href="/src/popup/popup.css" />
-  </head>
-  <body>
-    <main class="app">
-      <header class="topbar">
-        <div class="title">QR Generator</div>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QRCoder</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script type="module" crossorigin src="/assets/popup.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/chunks/storage.js">
+  <link rel="stylesheet" crossorigin href="/assets/popup.css">
+</head>
+<body>
+  <main class="app">
+    <section class="panel input">
+      <div class="row">
+        <md-outlined-text-field id="inputPayload" label="Text or URL" supporting-text="Generate a QR from any text or URL" value=""></md-outlined-text-field>
+      </div>
 
-      <section class="panel">
-        <div class="topGrid">
-          <md-filled-button id="btnActiveTab" type="button">Active tab</md-filled-button>
-          <md-outlined-button id="btnOptions" type="button">Options</md-outlined-button>
+      <div class="row split">
+        <md-filled-button id="btnGenerate" type="button">Generate</md-filled-button>
+        <md-outlined-button id="btnOptions" type="button">Options</md-outlined-button>
+      </div>
+    </section>
 
-          <md-outlined-text-field id="inputPayload" label="Text / URL" value=""></md-outlined-text-field>
+    <section class="panel preview">
+      <div class="previewWrap">
+        <div id="qrMount" class="qrMount"></div>
+      </div>
 
-          <md-filled-button id="btnGenerate" type="button">Generate</md-filled-button>
+      <div class="row wrap">
+        <md-outlined-button id="btnDownloadPng" type="button">PNG</md-outlined-button>
+        <md-outlined-button id="btnDownloadSvg" type="button">SVG</md-outlined-button>
+        <md-outlined-button id="btnDownloadJpeg" type="button">JPEG</md-outlined-button>
+        <md-outlined-button id="btnDownloadWebp" type="button">WEBP</md-outlined-button>
+        <md-outlined-button id="btnCopy" type="button">Copy</md-outlined-button>
+      </div>
+
+      <div class="row">
+        <md-outlined-button id="btnToggleCustomize" type="button">Customize</md-outlined-button>
+      </div>
+    </section>
+
+    <details id="customizeDetails" class="panel customize">
+      <summary class="customizeSummary">
+        <span class="sectionTitle">Customize</span>
+        <span class="hint">Tip: right-click QR to download PNG (Shift+right-click for SVG)</span>
+      </summary>
+
+      <div class="group">
+        <div class="groupTitle">Colors</div>
+        <div class="grid2">
+          <label class="colorField">
+            <span class="colorLabel">Foreground</span>
+            <input id="fg" class="colorInput" type="color" value="#111111" />
+          </label>
+          <label class="colorField">
+            <span class="colorLabel">Background</span>
+            <input id="bg" class="colorInput" type="color" value="#ffffff" />
+          </label>
+          <label class="colorField">
+            <span class="colorLabel">Eye inner</span>
+            <input id="eyeInner" class="colorInput" type="color" value="#111111" />
+          </label>
+          <label class="colorField">
+            <span class="colorLabel">Eye outer</span>
+            <input id="eyeOuter" class="colorInput" type="color" value="#111111" />
+          </label>
         </div>
-      </section>
-
-      <section class="panel preview">
-        <div class="previewRow">
-          <div class="previewWrap">
-            <div id="qrMount" class="qrMount"></div>
-          </div>
-
-          <div class="previewActions">
-            <div class="actionTitle">Download</div>
-            <div class="actionHint">Right-click QR: PNG | Shift+Right-click: SVG</div>
-
-            <div class="sizeRow">
-              <md-outlined-select id="quickSizePreset" label="Size">
-                <md-select-option selected value="256">256</md-select-option>
-                <md-select-option value="512">512</md-select-option>
-                <md-select-option value="1024">1024</md-select-option>
-                <md-select-option value="custom">Custom</md-select-option>
-              </md-outlined-select>
-              <md-outlined-text-field id="quickCustomSize" label="px" type="number" value="256"></md-outlined-text-field>
-            </div>
-
-            <div class="actionButtons">
-              <md-outlined-button id="btnDownloadPng" type="button">PNG</md-outlined-button>
-              <md-outlined-button id="btnDownloadSvg" type="button">SVG</md-outlined-button>
-              <md-outlined-button id="btnDownloadJpeg" type="button">JPEG</md-outlined-button>
-              <md-outlined-button id="btnDownloadWebp" type="button">WEBP</md-outlined-button>
-              <md-outlined-button id="btnCopy" type="button">Copy</md-outlined-button>
-            </div>
-
-            <md-outlined-button id="btnToggleCustomize" type="button">Customize</md-outlined-button>
-          </div>
-        </div>
-      </section>
-
-      <details id="customizeDetails" class="panel customize">
-        <summary class="customizeSummary">
-          <span class="sectionTitle">Customize</span>
-          <span class="hint">Tip: right-click QR to download PNG (Shift+right-click for SVG)</span>
-        </summary>
-
-        <div class="group">
-          <div class="groupTitle">Colors</div>
-          <div class="grid2">
-            <label class="colorField">
-              <span class="colorLabel">Foreground</span>
-              <input id="fg" class="colorInput" type="color" value="#111111" />
-            </label>
-            <label class="colorField">
-              <span class="colorLabel">Background</span>
-              <input id="bg" class="colorInput" type="color" value="#ffffff" />
-            </label>
-            <label class="colorField">
-              <span class="colorLabel">Eye inner</span>
-              <input id="eyeInner" class="colorInput" type="color" value="#111111" />
-            </label>
-            <label class="colorField">
-              <span class="colorLabel">Eye outer</span>
-              <input id="eyeOuter" class="colorInput" type="color" value="#111111" />
-            </label>
-          </div>
-          <div class="row">
-            <md-switch id="transparentBg"></md-switch>
-            <div class="labelCol">
-              <div class="label">Transparent background</div>
-              <div class="hint">Use PNG export for transparency.</div>
-            </div>
+        <div class="row">
+          <md-switch id="transparentBg"></md-switch>
+          <div class="labelCol">
+            <div class="label">Transparent background</div>
+            <div class="hint">Use PNG export for transparency.</div>
           </div>
         </div>
+      </div>
 
-        <div class="group">
-          <div class="groupTitle">Shape</div>
-          <md-outlined-select id="dotStyle" label="Shape">
-            <md-select-option value="square">Square</md-select-option>
-            <md-select-option value="rounded">Rounded</md-select-option>
-            <md-select-option value="dots">Dots</md-select-option>
-          </md-outlined-select>
-        </div>
+      <div class="group">
+        <div class="groupTitle">Shape</div>
+        <md-outlined-select id="dotStyle" label="Shape">
+          <md-select-option value="square">Square</md-select-option>
+          <md-select-option value="rounded">Rounded</md-select-option>
+          <md-select-option value="dots">Dots</md-select-option>
+        </md-outlined-select>
+      </div>
 
-        <div class="group">
-          <div class="groupTitle">Gradient</div>
-          <div class="row">
-            <md-switch id="gradientEnabled"></md-switch>
-            <div class="labelCol">
-              <div class="label">Enable gradient</div>
-            </div>
-          </div>
-          <div class="row">
-            <md-outlined-text-field id="gradientRotation" label="Rotation (deg)" type="number" value="0"></md-outlined-text-field>
+      <div class="group">
+        <div class="groupTitle">Gradient</div>
+        <div class="row">
+          <md-switch id="gradientEnabled"></md-switch>
+          <div class="labelCol">
+            <div class="label">Enable gradient</div>
           </div>
         </div>
+        <div class="row">
+          <md-outlined-text-field id="gradientRotation" label="Rotation (deg)" type="number" value="0"></md-outlined-text-field>
+        </div>
+      </div>
 
-        <div class="group">
-          <div class="groupTitle">Logo</div>
-          <div class="row">
-            <md-switch id="logoEnabled"></md-switch>
-            <div class="labelCol">
-              <div class="label">Enable logo</div>
-            </div>
-          </div>
-          <div class="row">
-            <md-outlined-text-field id="logoSize" label="Size (%)" type="number" value="22"></md-outlined-text-field>
-            <md-outlined-text-field id="logoPadding" label="Padding" type="number" value="6"></md-outlined-text-field>
-          </div>
-          <div class="row">
-            <md-outlined-text-field id="logoRadius" label="Border radius" type="number" value="8"></md-outlined-text-field>
-          </div>
-          <div class="row">
-            <input type="file" id="logoFile" accept="image/*" style="display: none" />
-            <md-outlined-button id="btnUploadLogo" type="button">Upload logo</md-outlined-button>
+      <div class="group">
+        <div class="groupTitle">Logo</div>
+        <div class="row">
+          <md-switch id="logoEnabled"></md-switch>
+          <div class="labelCol">
+            <div class="label">Enable logo</div>
           </div>
         </div>
+        <div class="row">
+          <md-outlined-text-field id="logoSize" label="Size (%)" type="number" value="22"></md-outlined-text-field>
+          <md-outlined-text-field id="logoPadding" label="Padding" type="number" value="6"></md-outlined-text-field>
+        </div>
+        <div class="row">
+          <md-outlined-text-field id="logoRadius" label="Border radius" type="number" value="8"></md-outlined-text-field>
+        </div>
+        <div class="row">
+          <input type="file" id="logoFile" accept="image/*" style="display:none;" />
+          <md-outlined-button id="btnUploadLogo" type="button">Upload logo</md-outlined-button>
+        </div>
+      </div>
 
-        <div class="group">
-          <div class="groupTitle">Size</div>
-          <md-outlined-select id="sizePreset" label="Size preset">
-            <md-select-option value="128">128</md-select-option>
-            <md-select-option selected value="256">256</md-select-option>
-            <md-select-option value="512">512</md-select-option>
-            <md-select-option value="1024">1024</md-select-option>
-            <md-select-option value="custom">Custom</md-select-option>
-          </md-outlined-select>
-          <div class="row">
-            <md-outlined-text-field id="customSize" label="Custom size (px)" type="number" value="256"></md-outlined-text-field>
+      <div class="group">
+        <div class="groupTitle">Size</div>
+        <md-outlined-select id="sizePreset" label="Size preset">
+          <md-select-option value="128">128</md-select-option>
+          <md-select-option selected value="256">256</md-select-option>
+          <md-select-option value="512">512</md-select-option>
+          <md-select-option value="1024">1024</md-select-option>
+          <md-select-option value="custom">Custom</md-select-option>
+        </md-outlined-select>
+        <div class="row">
+          <md-outlined-text-field id="customSize" label="Custom size (px)" type="number" value="256"></md-outlined-text-field>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="groupTitle">Frame</div>
+        <div class="row">
+          <md-switch id="frameEnabled"></md-switch>
+          <div class="labelCol">
+            <div class="label">Enable frame</div>
           </div>
         </div>
-
-        <div class="group">
-          <div class="groupTitle">Frame</div>
-          <div class="row">
-            <md-switch id="frameEnabled"></md-switch>
-            <div class="labelCol">
-              <div class="label">Enable frame</div>
-            </div>
-          </div>
-          <div class="row">
-            <md-outlined-text-field id="frameThickness" label="Thickness" type="number" value="14"></md-outlined-text-field>
-            <label class="colorField inline">
-              <span class="colorLabel">Color</span>
-              <input id="frameColor" class="colorInput" type="color" value="#111111" />
-            </label>
-          </div>
+        <div class="row">
+          <md-outlined-text-field id="frameThickness" label="Thickness" type="number" value="14"></md-outlined-text-field>
+          <label class="colorField inline">
+            <span class="colorLabel">Color</span>
+            <input id="frameColor" class="colorInput" type="color" value="#111111" />
+          </label>
         </div>
-      </details>
+      </div>
+    </details>
 
-      <div id="snackbar" class="snackbar" aria-live="polite"></div>
-    </main>
-
-    <script type="module" src="/src/popup/popup.ts"></script>
-  </body>
+    <div id="snackbar" class="snackbar" aria-live="polite"></div>
+  </main>
+</body>
 </html>

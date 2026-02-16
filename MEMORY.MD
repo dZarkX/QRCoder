@@ -14,17 +14,20 @@ UI uses Material Design 3.
 0.1.5
 
 ## Version History
-- 0.1.0
-  - Project scaffold initialized (Vite + TypeScript)
-  - MV3 manifest created
-  - Placeholder architecture and build pipeline started
-  - Added @types/chrome, @types/node for TS support
-  - Added qr-code-styling vendor d.ts shim
-  - Fixed Vite alias @ -> src resolution
-  - Fixed Vite HTML asset output: flatten to dist root (popup.html, options.html)
-  - Build pipeline now produces loadable extension (dist/ ready for chrome://extensions)
-  - **UI/UX overhaul**: improved typography (system font stack), better contrast, modern color palette, shadows, MD3 component theming, consistent spacing, elevated panels, accent colors, better readability in both light/dark modes.
+- 0.1.5
+  - **Build pipeline**: flattened output to project root (no dist/), build/ folder intermediate.
+  - **Layout fixes**: constrained preview actions width (max-width: 210px) and added flex-shrink: 0 to buttons to prevent overflow.
+  - **Popup stability**: reverted problematic CSS changes that caused layout breakdown; restored known-good layout.
+  - **Button overflow**: fixed download buttons expanding beyond container in preview panel.
+- 0.1.4
+  - **Minimalist top panel**: compact input section.
+  - **Quick size selector**: 256/512/1024/custom next to QR preview, synced with Customize settings.
+  - **Popup overflow fix**: made popup scroll internally, prevented horizontal scrolling.
+- 0.1.3
   - **JetBrains Mono font**: integrated via @font-face (OFL), CSS variable --font-mono, bundled in build.
+  - **Typography tokens**: Material Web components now use JetBrains Mono consistently.
+  - **Layout adjustments**: wider popup, moved download actions next to QR preview.
+- 0.1.2
   - **README.md**: comprehensive project documentation, features, installation, development, architecture.
   - **Full QR customization UI**: colors (fg/bg/eye inner/eye outer), transparent bg toggle, shape (square/rounded/dots), gradient (linear, rotation), logo upload (size/padding/radius), size presets (128/256/512/1024/custom), frame (thickness/color). Live updates on any change.
   - **Export formats**: PNG, SVG, JPEG, WEBP; clipboard copy (PNG).
@@ -41,13 +44,23 @@ UI uses Material Design 3.
     - Popup stability: prevent layout overflow by making popup scroll internally.
     - Popup stability: fixed horizontal overflow by locking html/body dimensions and using minmax(0,*) grid columns.
     - Quick size selector: added size presets 256/512/1024/custom next to QR preview (synced with Customize size settings).
+- 0.1.0
+  - Project scaffold initialized (Vite + TypeScript)
+  - MV3 manifest created
+  - Placeholder architecture and build pipeline started
+  - Added @types/chrome, @types/node for TS support
+  - Added qr-code-styling vendor d.ts shim
+  - Fixed Vite alias @ -> src resolution
+  - Fixed Vite HTML asset output: flatten to dist root (popup.html, options.html)
+  - Build pipeline now produces loadable extension (dist/ ready for chrome://extensions)
+  - **UI/UX overhaul**: improved typography (system font stack), better contrast, modern color palette, shadows, MD3 component theming, consistent spacing, elevated panels, accent colors, better readability in both light/dark modes.
 
 ## Completed Features
 - Project scaffolding: `package.json`, `tsconfig.json`, `vite.config.ts`
 - MV3 `manifest.json` added
 - MEMORY file created
-- Build pipeline: Vite multi-entry, stable JS names, flattened HTML output
-- Extension loads in Chrome (dist/ ready)
+- Build pipeline: Vite multi-entry, stable JS names, flattened HTML output to project root (no dist/)
+- Extension loads in Chrome (project root ready for "Load unpacked")
 - Popup UI (MD3) with:
   - Use active tab URL
   - Custom text/URL input
@@ -56,6 +69,8 @@ UI uses Material Design 3.
   - Copy PNG to clipboard
   - **Improved visual design**: modern typography, better contrast, shadows, accent colors, consistent spacing, elevated panels, responsive light/dark theme.
   - **Full customization panel**: colors, shape, gradient, logo upload, size presets, frame; live update on any change.
+  - **Quick size selector**: 256/512/1024/custom presets next to QR preview, synced with Customize settings.
+  - **Layout fixes**: constrained preview actions width, prevented button overflow.
 - Options page (MD3) with:
   - Default colors, transparent bg toggle, default size
   - **Improved visual design**: same design system as popup, better readability, component theming.
@@ -66,7 +81,7 @@ UI uses Material Design 3.
 - Storage abstraction and defaults module
 - TypeScript strict mode, typed Chrome APIs, typed QR settings
 - **Design System**: shared CSS variables for colors, shadows, spacing; MD3 component theming for buttons, inputs, switches, selects.
-- **JetBrains Mono**: integrated via @font-face, bundled in dist/assets/, CSS variable --font-mono.
+- **JetBrains Mono**: integrated via @font-face, bundled in assets/, CSS variable --font-mono, applied to MD components via typography tokens.
 - **README.md**: detailed project documentation, features, installation, development, architecture, license.
 
 ## In-Progress Features
@@ -87,11 +102,13 @@ UI uses Material Design 3.
 - Use Vite multi-entry build with stable output filenames for MV3 (`background.js`, `content.js`).
 - Added @types/chrome and @types/node for full TS support.
 - Added minimal qr-code-styling.d.ts to avoid missing types.
-- Vite build now emits HTML to dist root via root entrypoints (no manual copy required).
+- Vite build now emits HTML to project root via root entrypoints (no dist/ folder).
 - **Design System**: introduced CSS custom properties for consistent colors, shadows, spacing; applied MD3 component theming; improved font stack and contrast.
-- **JetBrains Mono**: @font-face declarations, CSS variable, bundled via Vite assets.
+- **JetBrains Mono**: @font-face declarations, CSS variable, bundled via Vite assets, applied to MD components with typography tokens.
 - **Customization UI**: live updates on any control change; file upload for logo; persisted settings.
 - **Export formats**: extended to JPEG and WEBP; unified download handler.
+- **Layout fixes**: constrained preview actions width, added flex-shrink to buttons to prevent overflow.
+- **Build pipeline**: flattened output to project root, removed intermediate dist/ folder for cleaner structure.
 
 ## User Preferences and Feedback
 - Must use Material Design 3 for all UI.
@@ -106,10 +123,15 @@ UI uses Material Design 3.
 
 ## File Structure Explanation
 - `/public`
-  - `manifest.json` (copied as-is to `dist/`)
+  - `manifest.json` (copied as-is to project root)
 - `/src`
   - `background/` (service worker)
   - `content/` (content script)
   - `popup/` (popup UI)
   - `options/` (options page)
   - `services/`, `utils/`, `types/` (core modules)
+- Build output (project root):
+  - `popup.html`, `options.html` (flattened from src/)
+  - `background.js`, `content.js` (service worker and content script)
+  - `assets/` (CSS, JS, fonts, images)
+  - `public/` contents (manifest.json, icons)

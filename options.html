@@ -1,44 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Generator Options</title>
-    <link rel="stylesheet" href="/src/options/options.css" />
-  </head>
-  <body>
-    <main class="app">
-      <header class="topbar">
-        <div class="title">Options</div>
-        <md-filled-button id="btnSave" type="button">Save</md-filled-button>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QRCoder Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script type="module" crossorigin src="/assets/options.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/chunks/storage.js">
+  <link rel="stylesheet" crossorigin href="/assets/options.css">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1 class="title">QRCoder Options</h1>
+      <p class="subtitle">Customize default QR code settings</p>
+    </header>
 
-      <section class="panel">
-        <div class="sectionTitle">Defaults</div>
-
+    <section class="panel">
+      <div class="group">
+        <div class="groupTitle">Default Colors</div>
         <div class="grid2">
-          <md-outlined-text-field id="fg" label="Foreground" value="#111111"></md-outlined-text-field>
-          <md-outlined-text-field id="bg" label="Background" value="#ffffff"></md-outlined-text-field>
-          <md-outlined-text-field id="eyeInner" label="Eye inner" value="#111111"></md-outlined-text-field>
-          <md-outlined-text-field id="eyeOuter" label="Eye outer" value="#111111"></md-outlined-text-field>
+          <label class="colorField">
+            <span class="colorLabel">Foreground</span>
+            <input id="fg" class="colorInput" type="color" value="#111111" />
+          </label>
+          <label class="colorField">
+            <span class="colorLabel">Background</span>
+            <input id="bg" class="colorInput" type="color" value="#ffffff" />
+          </label>
         </div>
-
         <div class="row">
           <md-switch id="transparentBg"></md-switch>
           <div class="labelCol">
-            <div class="label">Transparent background</div>
+            <div class="label">Transparent background by default</div>
             <div class="hint">Use PNG export for transparency.</div>
           </div>
         </div>
+      </div>
 
+      <div class="group">
+        <div class="groupTitle">Default Size</div>
+        <md-outlined-select id="defaultSize" label="Default size preset">
+          <md-select-option value="128">128</md-select-option>
+          <md-select-option selected value="256">256</md-select-option>
+          <md-select-option value="512">512</md-select-option>
+          <md-select-option value="1024">1024</md-select-option>
+          <md-select-option value="custom">Custom</md-select-option>
+        </md-outlined-select>
         <div class="row">
-          <md-outlined-text-field id="size" label="Default size (px)" type="number" value="256"></md-outlined-text-field>
+          <md-outlined-text-field id="customSize" label="Custom default size (px)" type="number" value="256"></md-outlined-text-field>
         </div>
-      </section>
+      </div>
 
-      <div id="snackbar" class="snackbar" aria-live="polite"></div>
-    </main>
+      <div class="actions">
+        <md-filled-button id="btnSave" type="button">Save Settings</md-filled-button>
+        <md-outlined-button id="btnReset" type="button">Reset to Defaults</md-outlined-button>
+      </div>
+    </section>
 
-    <script type="module" src="/src/options/options.ts"></script>
-  </body>
+    <div id="snackbar" class="snackbar" aria-live="polite"></div>
+  </main>
+</body>
 </html>
