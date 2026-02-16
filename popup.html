@@ -13,22 +13,13 @@
       </header>
 
       <section class="panel">
-        <div class="row">
-          <md-filled-button id="btnActiveTab" type="button">Use active tab URL</md-filled-button>
-        </div>
-
-        <div class="row">
-          <md-outlined-text-field
-            id="inputPayload"
-            label="Text or URL"
-            supporting-text="Generate a QR from any text or URL"
-            value=""
-          ></md-outlined-text-field>
-        </div>
-
-        <div class="row split">
-          <md-filled-button id="btnGenerate" type="button">Generate</md-filled-button>
+        <div class="topGrid">
+          <md-filled-button id="btnActiveTab" type="button">Active tab</md-filled-button>
           <md-outlined-button id="btnOptions" type="button">Options</md-outlined-button>
+
+          <md-outlined-text-field id="inputPayload" label="Text / URL" value=""></md-outlined-text-field>
+
+          <md-filled-button id="btnGenerate" type="button">Generate</md-filled-button>
         </div>
       </section>
 
@@ -41,6 +32,16 @@
           <div class="previewActions">
             <div class="actionTitle">Download</div>
             <div class="actionHint">Right-click QR: PNG | Shift+Right-click: SVG</div>
+
+            <div class="sizeRow">
+              <md-outlined-select id="quickSizePreset" label="Size">
+                <md-select-option selected value="256">256</md-select-option>
+                <md-select-option value="512">512</md-select-option>
+                <md-select-option value="1024">1024</md-select-option>
+                <md-select-option value="custom">Custom</md-select-option>
+              </md-outlined-select>
+              <md-outlined-text-field id="quickCustomSize" label="px" type="number" value="256"></md-outlined-text-field>
+            </div>
 
             <div class="actionButtons">
               <md-outlined-button id="btnDownloadPng" type="button">PNG</md-outlined-button>

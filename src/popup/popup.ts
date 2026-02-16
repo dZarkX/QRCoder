@@ -146,6 +146,8 @@ async function main() {
   const btnCopy = qs<HTMLElement>(document, '#btnCopy');
   const btnToggleCustomize = qs<HTMLElement>(document, '#btnToggleCustomize');
   const customizeDetails = qs<HTMLDetailsElement>(document, '#customizeDetails');
+  const quickSizePreset = qs<any>(document, '#quickSizePreset');
+  const quickCustomSize = qs<HTMLInputElement>(document, '#quickCustomSize');
   const btnUploadLogo = qs<HTMLElement>(document, '#btnUploadLogo');
   const logoFile = qs<HTMLInputElement>(document, '#logoFile');
   const inputPayload = qs<HTMLInputElement>(document, '#inputPayload');
@@ -154,6 +156,12 @@ async function main() {
   const state = await loadInitialState();
   inputPayload.value = state.payload;
   writeFormSettings(state.settings);
+
+  // Initialize quick size controls
+  (quickSizePreset as any).value = state.settings.size.preset === 'custom'
+    ? 'custom'
+    : String(state.settings.size.preset);
+  quickCustomSize.value = String(state.settings.size.customSize);
 
   const generator = new QrGenerator();
   generator.render({ element: qrMount });
@@ -204,6 +212,10 @@ async function main() {
   ];
   liveInputs.forEach(id => {
     qs<HTMLInputElement>(document, `#${id}`).addEventListener('input', async () => {
+      if (id === 'customSize') {
+        quickCustomSize.value = qs<HTMLInputElement>(document, '#customSize').value;
+        (quickSizePreset as any).value = 'custom';
+      }
       if (state.payload.trim()) {
         await generateAndPersist({});
       }
@@ -231,10 +243,49 @@ async function main() {
   const liveSelects = ['dotStyle', 'sizePreset'];
   liveSelects.forEach(id => {
     qs<any>(document, `#${id}`).addEventListener('change', async () => {
+      if (id === 'sizePreset') {
+        const sizePresetSelect = qs<any>(document, '#sizePreset');
+        (quickSizePreset as any).value = (sizePresetSelect as any).value ?? (sizePresetSelect as any).selected;
+        quickCustomSize.value = qs<HTMLInputElement>(document, '#customSize').value;
+      }
       if (state.payload.trim()) {
         await generateAndPersist({});
       }
     });
+  });
+
+  function readQuickSize(): Partial<QrState['settings']> {
+    const preset = (quickSizePreset as any).value ?? (quickSizePreset as any).selected;
+    const customSize = Number(quickCustomSize.value) || 256;
+    return {
+      size: {
+        preset: preset === 'custom' ? 'custom' : (Number(preset) as 256 | 512 | 1024),
+        customSize
+      }
+    };
+  }
+
+  quickSizePreset.addEventListener('change', async () => {
+    // Keep main customize controls in sync
+    const sizePresetSelect = qs<any>(document, '#sizePreset');
+    (sizePresetSelect as any).value = (quickSizePreset as any).value;
+    qs<HTMLInputElement>(document, '#customSize').value = quickCustomSize.value;
+
+    if (state.payload.trim()) {
+      await generateAndPersist({ settings: readQuickSize() });
+    }
+  });
+
+  quickCustomSize.addEventListener('input', async () => {
+    // Switch to custom when typing
+    (quickSizePreset as any).value = 'custom';
+    const sizePresetSelect = qs<any>(document, '#sizePreset');
+    (sizePresetSelect as any).value = 'custom';
+    qs<HTMLInputElement>(document, '#customSize').value = quickCustomSize.value;
+
+    if (state.payload.trim()) {
+      await generateAndPersist({ settings: readQuickSize() });
+    }
   });
 
   // Logo upload

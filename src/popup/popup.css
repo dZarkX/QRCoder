@@ -59,6 +59,7 @@ body {
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 .app {
@@ -68,6 +69,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: 600px;
+  overflow: auto;
 }
 
 /* Prevent "window stretching" caused by long content */
@@ -104,6 +107,21 @@ body {
 .panel:first-of-type {
   padding: 12px;
   gap: 10px;
+}
+
+.topGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.topGrid md-outlined-text-field {
+  grid-column: 1 / -1;
+}
+
+.topGrid md-filled-button#btnGenerate {
+  grid-column: 1 / -1;
 }
 
 .grid2 {
@@ -163,7 +181,7 @@ md-outlined-button {
 
 .previewRow {
   display: grid;
-  grid-template-columns: 1fr 190px;
+  grid-template-columns: 1fr 210px;
   gap: 14px;
   align-items: start;
 }
@@ -191,6 +209,17 @@ md-outlined-button {
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
+}
+
+.sizeRow {
+  display: grid;
+  grid-template-columns: 1fr 84px;
+  gap: 8px;
+  align-items: end;
+}
+
+.sizeRow md-outlined-text-field {
+  width: 100%;
 }
 
 .qrMount {
