@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Generator</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="title">QR Generator</div>
+      </header>
+
+      <section class="panel">
+        <div class="row">
+          <md-filled-button id="btnActiveTab" type="button">Use active tab URL</md-filled-button>
+        </div>
+
+        <div class="row">
+          <md-outlined-text-field id="inputPayload" label="Text or URL" supporting-text="Generate a QR from any text or URL" value=""></md-outlined-text-field>
+        </div>
+
+        <div class="row split">
+          <md-filled-button id="btnGenerate" type="button">Generate</md-filled-button>
+          <md-outlined-button id="btnOptions" type="button">Options</md-outlined-button>
+        </div>
+      </section>
+
+      <section class="panel preview">
+        <div class="previewWrap">
+          <div id="qrMount" class="qrMount"></div>
+        </div>
+
+        <div class="row split">
+          <md-outlined-button id="btnDownloadPng" type="button">PNG</md-outlined-button>
+          <md-outlined-button id="btnDownloadSvg" type="button">SVG</md-outlined-button>
+          <md-outlined-button id="btnCopy" type="button">Copy</md-outlined-button>
+        </div>
+      </section>
+
+      <div id="snackbar" class="snackbar" aria-live="polite"></div>
+    </main>
+
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>

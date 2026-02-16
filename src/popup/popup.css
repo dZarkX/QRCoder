@@ -1,0 +1,99 @@
+:root {
+  color-scheme: light dark;
+  --bg: light-dark(#ffffff, #0f1115);
+  --surface: light-dark(#f7f7fb, #151924);
+  --text: light-dark(#111111, #f2f4f8);
+  --muted: light-dark(#5a5f6a, #a7adbb);
+  --border: light-dark(#e2e5ee, #2a3140);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  width: 360px;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-weight: 650;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.split {
+  justify-content: space-between;
+}
+
+md-outlined-text-field {
+  width: 100%;
+}
+
+.previewWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.qrMount {
+  width: 256px;
+  height: 256px;
+  border-radius: 16px;
+  background: light-dark(#ffffff, #0b0e14);
+  border: 1px dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.snackbar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: light-dark(#111111, #f2f4f8);
+  color: light-dark(#ffffff, #111111);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+  font-size: 12px;
+}
+
+.snackbar.show {
+  opacity: 0.95;
+}

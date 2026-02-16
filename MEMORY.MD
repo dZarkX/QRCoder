@@ -1,0 +1,85 @@
+# MEMORY
+
+## Project Overview
+Chrome Extension (Manifest V3) that generates customizable QR codes from:
+- Active tab URL
+- Custom user input (text, URL, image URL, uploaded image)
+- Context menu actions (page/link/image)
+
+UI uses Material Design 3.
+
+## Current Version
+0.1.0
+
+## Version History
+- 0.1.0
+  - Project scaffold initialized (Vite + TypeScript)
+  - MV3 manifest created
+  - Placeholder architecture and build pipeline started
+  - Added @types/chrome, @types/node for TS support
+  - Added qr-code-styling vendor d.ts shim
+  - Fixed Vite alias @ -> src resolution
+  - Fixed Vite HTML asset output: flatten to dist root (popup.html, options.html)
+  - Build pipeline now produces loadable extension (dist/ ready for chrome://extensions)
+
+## Completed Features
+- Project scaffolding: `package.json`, `tsconfig.json`, `vite.config.ts`
+- MV3 `manifest.json` added
+- MEMORY file created
+- Build pipeline: Vite multi-entry, stable JS names, flattened HTML output
+- Extension loads in Chrome (dist/ ready)
+- Popup UI (MD3) with:
+  - Use active tab URL
+  - Custom text/URL input
+  - Live QR preview (qr-code-styling)
+  - Export PNG/SVG
+  - Copy PNG to clipboard
+- Options page (MD3) with:
+  - Default colors, transparent bg toggle, default size
+- Context menu integration:
+  - Items: page/link/image
+  - Stores pendingContext in chrome.storage.local
+  - Popup consumes pendingContext and auto-generates
+- Storage abstraction and defaults module
+- TypeScript strict mode, typed Chrome APIs, typed QR settings
+
+## In-Progress Features
+- Full QR customization UI (colors, eyes, gradient, shape, logo upload, size presets, frame)
+- Export formats: JPEG, WEBP, EPS (optional)
+- Presets and history
+- Git repo init + GitHub push (dZarkX/QRCoder)
+
+## Known Issues
+- Vite assetFileNames logic still nests HTML under dist/src/ during build; manual copy used as workaround.
+
+## Problems Encountered
+- npm peer dependency conflict: vite-plugin-static-copy required Vite ^5, we used Vite ^6. Solution: removed vite-plugin-static-copy; Vite copies public/ automatically.
+- Rollup could not resolve @/* imports. Solution: added resolve.alias in vite.config.ts.
+- Chrome failed to load extension: HTML files were under dist/src/ instead of dist/. Solution: manual copy; will fix Vite config later.
+
+## Solutions Applied
+- Use Vite multi-entry build with stable output filenames for MV3 (`background.js`, `content.js`).
+- Added @types/chrome and @types/node for full TS support.
+- Added minimal qr-code-styling.d.ts to avoid missing types.
+- Manual copy of HTML to dist root as temporary workaround.
+
+## User Preferences and Feedback
+- Must use Material Design 3 for all UI.
+- Must keep modular architecture under `/src`.
+- Must maintain `MEMORY.MD` and bump MINOR by +0.1 per iteration.
+
+## Architecture Decisions
+- **Build tool**: Vite, multi-entry output.
+- **UI**: `@material/web` (Material 3 web components).
+- **Persistence**: `chrome.storage.local`.
+- **QR engine**: planned `qr-code-styling`.
+
+## File Structure Explanation
+- `/public`
+  - `manifest.json` (copied as-is to `dist/`)
+- `/src`
+  - `background/` (service worker)
+  - `content/` (content script)
+  - `popup/` (popup UI)
+  - `options/` (options page)
+  - `services/`, `utils/`, `types/` (core modules)
