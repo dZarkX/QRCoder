@@ -1,12 +1,15 @@
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/textfield/outlined-text-field.js';
+import '@material/web/switch/switch.js';
+import '@material/web/select/outlined-select.js';
+import '@material/web/select/select-option.js';
 
 import { qs } from '@/utils/dom';
 import { getDefaultCustomizationSettings } from '@/services/defaults';
 import { getFromStorage, getStorageKeys, setInStorage } from '@/services/storage';
 import { QrGenerator } from '@/services/qr-generator';
-import type { QrState } from '@/types/qr';
+import type { QrState, QrDotStyle } from '@/types/qr';
 import { consumePendingContext } from '@/popup/context-consume';
 
 const keys = getStorageKeys();
@@ -36,18 +39,103 @@ async function loadInitialState(): Promise<QrState> {
   };
 }
 
+function readFormSettings(): Partial<QrState['settings']> {
+  const fg = qs<HTMLInputElement>(document, '#fg').value;
+  const bg = qs<HTMLInputElement>(document, '#bg').value;
+  const eyeInner = qs<HTMLInputElement>(document, '#eyeInner').value;
+  const eyeOuter = qs<HTMLInputElement>(document, '#eyeOuter').value;
+  const transparentBg = (qs<any>(document, '#transparentBg') as any).selected;
+  const dotStyleSelect = qs<any>(document, '#dotStyle');
+  const dotStyle = ['square', 'rounded', 'dots'].includes(dotStyleSelect.value) ? dotStyleSelect.value as QrDotStyle : 'square';
+  const gradientEnabled = (qs<any>(document, '#gradientEnabled') as any).selected;
+  const gradientRotation = Number(qs<HTMLInputElement>(document, '#gradientRotation').value) || 0;
+  const logoEnabled = (qs<any>(document, '#logoEnabled') as any).selected;
+  const logoSize = Number(qs<HTMLInputElement>(document, '#logoSize').value) || 22;
+  const logoPadding = Number(qs<HTMLInputElement>(document, '#logoPadding').value) || 6;
+  const logoRadius = Number(qs<HTMLInputElement>(document, '#logoRadius').value) || 8;
+  const sizePresetSelect = qs<any>(document, '#sizePreset');
+  const sizePreset = sizePresetSelect.value;
+  const customSize = Number(qs<HTMLInputElement>(document, '#customSize').value) || 256;
+  const frameEnabled = (qs<any>(document, '#frameEnabled') as any).selected;
+  const frameThickness = Number(qs<HTMLInputElement>(document, '#frameThickness').value) || 14;
+  const frameColor = qs<HTMLInputElement>(document, '#frameColor').value;
+
+  return {
+    colors: {
+      foreground: fg,
+      background: bg,
+      eyeInner,
+      eyeOuter,
+      transparentBackground: transparentBg
+    },
+    dotStyle,
+    gradient: {
+      enabled: gradientEnabled,
+      type: 'linear',
+      rotation: gradientRotation,
+      colorStops: [
+        { offset: 0, color: fg },
+        { offset: 1, color: eyeInner }
+      ]
+    },
+    logo: {
+      enabled: logoEnabled,
+      dataUrl: undefined, // will be set via file upload
+      sizePercent: logoSize,
+      padding: logoPadding,
+      borderRadius: logoRadius
+    },
+    size: {
+      preset: sizePreset === 'custom' ? 'custom' : Number(sizePreset) as 128 | 256 | 512 | 1024,
+      customSize
+    },
+    frame: {
+      enabled: frameEnabled,
+      thickness: frameThickness,
+      color: frameColor
+    }
+  };
+}
+
+function writeFormSettings(settings: QrState['settings']) {
+  qs<HTMLInputElement>(document, '#fg').value = settings.colors.foreground;
+  qs<HTMLInputElement>(document, '#bg').value = settings.colors.background;
+  qs<HTMLInputElement>(document, '#eyeInner').value = settings.colors.eyeInner;
+  qs<HTMLInputElement>(document, '#eyeOuter').value = settings.colors.eyeOuter;
+  (qs<any>(document, '#transparentBg') as any).selected = settings.colors.transparentBackground;
+  const dotStyleSelect = qs<any>(document, '#dotStyle');
+  dotStyleSelect.value = settings.dotStyle;
+  (qs<any>(document, '#gradientEnabled') as any).selected = settings.gradient.enabled;
+  qs<HTMLInputElement>(document, '#gradientRotation').value = String(settings.gradient.rotation);
+  (qs<any>(document, '#logoEnabled') as any).selected = settings.logo.enabled;
+  qs<HTMLInputElement>(document, '#logoSize').value = String(settings.logo.sizePercent);
+  qs<HTMLInputElement>(document, '#logoPadding').value = String(settings.logo.padding);
+  qs<HTMLInputElement>(document, '#logoRadius').value = String(settings.logo.borderRadius);
+  const sizePresetSelect = qs<any>(document, '#sizePreset');
+  sizePresetSelect.value = settings.size.preset === 'custom' ? 'custom' : String(settings.size.preset);
+  qs<HTMLInputElement>(document, '#customSize').value = String(settings.size.customSize);
+  (qs<any>(document, '#frameEnabled') as any).selected = settings.frame.enabled;
+  qs<HTMLInputElement>(document, '#frameThickness').value = String(settings.frame.thickness);
+  qs<HTMLInputElement>(document, '#frameColor').value = settings.frame.color;
+}
+
 async function main() {
   const btnActiveTab = qs<HTMLElement>(document, '#btnActiveTab');
   const btnGenerate = qs<HTMLElement>(document, '#btnGenerate');
   const btnOptions = qs<HTMLElement>(document, '#btnOptions');
   const btnDownloadPng = qs<HTMLElement>(document, '#btnDownloadPng');
   const btnDownloadSvg = qs<HTMLElement>(document, '#btnDownloadSvg');
+  const btnDownloadJpeg = qs<HTMLElement>(document, '#btnDownloadJpeg');
+  const btnDownloadWebp = qs<HTMLElement>(document, '#btnDownloadWebp');
   const btnCopy = qs<HTMLElement>(document, '#btnCopy');
+  const btnUploadLogo = qs<HTMLElement>(document, '#btnUploadLogo');
+  const logoFile = qs<HTMLInputElement>(document, '#logoFile');
   const inputPayload = qs<HTMLInputElement>(document, '#inputPayload');
   const qrMount = qs<HTMLElement>(document, '#qrMount');
 
   const state = await loadInitialState();
   inputPayload.value = state.payload;
+  writeFormSettings(state.settings);
 
   const generator = new QrGenerator();
   generator.render({ element: qrMount });
@@ -57,7 +145,7 @@ async function main() {
       ...state,
       ...next,
       payload: next.payload ?? inputPayload.value,
-      settings: next.settings ?? state.settings
+      settings: next.settings ?? { ...state.settings, ...readFormSettings() }
     };
 
     if (!merged.payload.trim()) {
@@ -71,6 +159,55 @@ async function main() {
     state.payload = merged.payload;
     state.settings = merged.settings;
   }
+
+  // Live updates on any setting change
+  const liveInputs = [
+    'fg', 'bg', 'eyeInner', 'eyeOuter',
+    'gradientRotation', 'logoSize', 'logoPadding', 'logoRadius',
+    'customSize', 'frameThickness', 'frameColor'
+  ];
+  liveInputs.forEach(id => {
+    qs<HTMLInputElement>(document, `#${id}`).addEventListener('input', async () => {
+      if (state.payload.trim()) {
+        await generateAndPersist({});
+      }
+    });
+  });
+
+  const liveSwitches = ['transparentBg', 'gradientEnabled', 'logoEnabled', 'frameEnabled'];
+  liveSwitches.forEach(id => {
+    qs<any>(document, `#${id}`).addEventListener('change', async () => {
+      if (state.payload.trim()) {
+        await generateAndPersist({});
+      }
+    });
+  });
+
+  const liveSelects = ['dotStyle', 'sizePreset'];
+  liveSelects.forEach(id => {
+    qs<any>(document, `#${id}`).addEventListener('change', async () => {
+      if (state.payload.trim()) {
+        await generateAndPersist({});
+      }
+    });
+  });
+
+  // Logo upload
+  btnUploadLogo.addEventListener('click', () => logoFile.click());
+  logoFile.addEventListener('change', async (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const dataUrl = await new Promise<string>((res) => {
+      const reader = new FileReader();
+      reader.onload = () => res(reader.result as string);
+      reader.readAsDataURL(file);
+    });
+    state.settings.logo.dataUrl = dataUrl;
+    if (state.payload.trim()) {
+      await generateAndPersist({});
+    }
+    showToast('Logo uploaded');
+  });
 
   btnActiveTab.addEventListener('click', async () => {
     try {
@@ -105,6 +242,22 @@ async function main() {
       return;
     }
     await generator.download('svg', 'qr');
+  });
+
+  btnDownloadJpeg.addEventListener('click', async () => {
+    if (!state.payload.trim()) {
+      showToast('Nothing to download');
+      return;
+    }
+    await generator.download('jpeg', 'qr');
+  });
+
+  btnDownloadWebp.addEventListener('click', async () => {
+    if (!state.payload.trim()) {
+      showToast('Nothing to download');
+      return;
+    }
+    await generator.download('webp', 'qr');
   });
 
   btnCopy.addEventListener('click', async () => {

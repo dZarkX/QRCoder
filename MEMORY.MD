@@ -22,6 +22,11 @@ UI uses Material Design 3.
   - Fixed Vite HTML asset output: flatten to dist root (popup.html, options.html)
   - Build pipeline now produces loadable extension (dist/ ready for chrome://extensions)
   - **UI/UX overhaul**: improved typography (system font stack), better contrast, modern color palette, shadows, MD3 component theming, consistent spacing, elevated panels, accent colors, better readability in both light/dark modes.
+  - **JetBrains Mono font**: integrated via @font-face (OFL), CSS variable --font-mono, bundled in build.
+  - **README.md**: comprehensive project documentation, features, installation, development, architecture.
+  - **Full QR customization UI**: colors (fg/bg/eye inner/eye outer), transparent bg toggle, shape (square/rounded/dots), gradient (linear, rotation), logo upload (size/padding/radius), size presets (128/256/512/1024/custom), frame (thickness/color). Live updates on any change.
+  - **Export formats**: PNG, SVG, JPEG, WEBP; clipboard copy (PNG).
+  - **MD3 components**: replaced unsupported segmented-button with md-outlined-select; added select theming.
 
 ## Completed Features
 - Project scaffolding: `package.json`, `tsconfig.json`, `vite.config.ts`
@@ -33,9 +38,10 @@ UI uses Material Design 3.
   - Use active tab URL
   - Custom text/URL input
   - Live QR preview (qr-code-styling)
-  - Export PNG/SVG
+  - Export PNG/SVG/JPEG/WEBP
   - Copy PNG to clipboard
   - **Improved visual design**: modern typography, better contrast, shadows, accent colors, consistent spacing, elevated panels, responsive light/dark theme.
+  - **Full customization panel**: colors, shape, gradient, logo upload, size presets, frame; live update on any change.
 - Options page (MD3) with:
   - Default colors, transparent bg toggle, default size
   - **Improved visual design**: same design system as popup, better readability, component theming.
@@ -45,13 +51,14 @@ UI uses Material Design 3.
   - Popup consumes pendingContext and auto-generates
 - Storage abstraction and defaults module
 - TypeScript strict mode, typed Chrome APIs, typed QR settings
-- **Design System**: shared CSS variables for colors, shadows, spacing; MD3 component theming for buttons, inputs, switches.
+- **Design System**: shared CSS variables for colors, shadows, spacing; MD3 component theming for buttons, inputs, switches, selects.
+- **JetBrains Mono**: integrated via @font-face, bundled in dist/assets/, CSS variable --font-mono.
+- **README.md**: detailed project documentation, features, installation, development, architecture, license.
 
 ## In-Progress Features
-- Full QR customization UI (colors, eyes, gradient, shape, logo upload, size presets, frame)
-- Export formats: JPEG, WEBP, EPS (optional)
 - Presets and history
 - Fix Vite config to emit HTML to root without manual copy
+- EPS export (optional)
 
 ## Known Issues
 - Vite assetFileNames logic still nests HTML under dist/src/ during build; manual copy used as workaround.
@@ -61,6 +68,7 @@ UI uses Material Design 3.
 - Rollup could not resolve @/* imports. Solution: added resolve.alias in vite.config.ts.
 - Chrome failed to load extension: HTML files were under dist/src/ instead of dist/. Solution: manual copy; will fix Vite config later.
 - **UI readability**: initial colors and fonts lacked contrast and modern feel. Solution: comprehensive design system overhaul with better typography, colors, shadows, and MD3 theming.
+- **Missing MD3 segmented-button**: not available in @material/web. Solution: replaced with md-outlined-select for shape and size preset; added select theming.
 
 ## Solutions Applied
 - Use Vite multi-entry build with stable output filenames for MV3 (`background.js`, `content.js`).
@@ -68,6 +76,9 @@ UI uses Material Design 3.
 - Added minimal qr-code-styling.d.ts to avoid missing types.
 - Manual copy of HTML to dist root as temporary workaround.
 - **Design System**: introduced CSS custom properties for consistent colors, shadows, spacing; applied MD3 component theming; improved font stack and contrast.
+- **JetBrains Mono**: @font-face declarations, CSS variable, bundled via Vite assets.
+- **Customization UI**: live updates on any control change; file upload for logo; persisted settings.
+- **Export formats**: extended to JPEG and WEBP; unified download handler.
 
 ## User Preferences and Feedback
 - Must use Material Design 3 for all UI.

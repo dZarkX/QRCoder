@@ -1,3 +1,24 @@
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../assets/fonts/fonts/webfonts/JetBrainsMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: italic;
+  font-weight: 400;
+  src: url('../../assets/fonts/fonts/webfonts/JetBrainsMono-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../../assets/fonts/fonts/webfonts/JetBrainsMono-Bold.woff2') format('woff2');
+}
+
 :root {
   color-scheme: light dark;
   --bg: light-dark(#ffffff, #0a0b0e);
@@ -11,6 +32,7 @@
   --success: #00a878;
   --error: #d93025;
   --shadow: light-dark(0 2px 8px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.32));
+  --font-mono: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 html,

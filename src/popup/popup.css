@@ -1,3 +1,24 @@
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../assets/fonts/fonts/webfonts/JetBrainsMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: italic;
+  font-weight: 400;
+  src: url('../../assets/fonts/fonts/webfonts/JetBrainsMono-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../../assets/fonts/fonts/webfonts/JetBrainsMono-Bold.woff2') format('woff2');
+}
+
 :root {
   color-scheme: light dark;
   --bg: light-dark(#ffffff, #0a0b0e);
@@ -11,6 +32,7 @@
   --success: #00a878;
   --error: #d93025;
   --shadow: light-dark(0 2px 8px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.32));
+  --font-mono: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 html,
@@ -144,4 +166,58 @@ md-outlined-button {
 
 .snackbar.show {
   opacity: 0.96;
+}
+
+/* Customization panel */
+.customize {
+  max-width: 380px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.sectionTitle {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.group:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.groupTitle {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+md-select {
+  --md-select-container-color: var(--surface-elevated);
+  --md-select-label-text-color: var(--text-secondary);
+  --md-select-input-text-color: var(--text);
+  --md-select-focus-outline-color: var(--accent);
+  --md-select-selected-focus-container-color: var(--accent-hover);
+  --md-select-selected-label-text-color: #ffffff;
+}
+
+md-switch {
+  --md-switch-selected-handle-color: var(--accent);
+  --md-switch-selected-focus-handle-color: var(--accent-hover);
+  --md-switch-selected-track-color: var(--accent);
+  --md-switch-selected-focus-track-color: var(--accent-hover);
 }

@@ -23,7 +23,7 @@
 
         <div class="row split">
           <md-filled-button id="btnGenerate" type="button">Generate</md-filled-button>
-          <md-outlined-button id="btnOptions" type="button">Options</md-outlined-button>
+          <md-outlined-button id="btnOptions" type="button">Options</md-filled-button>
         </div>
       </section>
 
@@ -35,7 +35,101 @@
         <div class="row split">
           <md-outlined-button id="btnDownloadPng" type="button">PNG</md-outlined-button>
           <md-outlined-button id="btnDownloadSvg" type="button">SVG</md-outlined-button>
+          <md-outlined-button id="btnDownloadJpeg" type="button">JPEG</md-outlined-button>
+          <md-outlined-button id="btnDownloadWebp" type="button">WEBP</md-outlined-button>
           <md-outlined-button id="btnCopy" type="button">Copy</md-outlined-button>
+        </div>
+      </section>
+
+      <section class="panel customize">
+        <div class="sectionTitle">Customize</div>
+
+        <div class="group">
+          <div class="groupTitle">Colors</div>
+          <div class="grid2">
+            <md-outlined-text-field id="fg" label="Foreground" value="#111111" type="color"></md-outlined-text-field>
+            <md-outlined-text-field id="bg" label="Background" value="#ffffff" type="color"></md-outlined-text-field>
+            <md-outlined-text-field id="eyeInner" label="Eye inner" value="#111111" type="color"></md-outlined-text-field>
+            <md-outlined-text-field id="eyeOuter" label="Eye outer" value="#111111" type="color"></md-outlined-text-field>
+          </div>
+          <div class="row">
+            <md-switch id="transparentBg"></md-switch>
+            <div class="labelCol">
+              <div class="label">Transparent background</div>
+              <div class="hint">Use PNG export for transparency.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="groupTitle">Shape</div>
+          <md-outlined-select id="dotStyle" label="Shape">
+            <md-select-option value="square">Square</md-select-option>
+            <md-select-option value="rounded">Rounded</md-select-option>
+            <md-select-option value="dots">Dots</md-select-option>
+          </md-outlined-select>
+        </div>
+
+        <div class="group">
+          <div class="groupTitle">Gradient</div>
+          <div class="row">
+            <md-switch id="gradientEnabled"></md-switch>
+            <div class="labelCol">
+              <div class="label">Enable gradient</div>
+            </div>
+          </div>
+          <div class="row">
+            <md-outlined-text-field id="gradientRotation" label="Rotation (deg)" type="number" value="0"></md-outlined-text-field>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="groupTitle">Logo</div>
+          <div class="row">
+            <md-switch id="logoEnabled"></md-switch>
+            <div class="labelCol">
+              <div class="label">Enable logo</div>
+            </div>
+          </div>
+          <div class="row">
+            <md-outlined-text-field id="logoSize" label="Size (%)" type="number" value="22"></md-outlined-text-field>
+            <md-outlined-text-field id="logoPadding" label="Padding" type="number" value="6"></md-outlined-text-field>
+          </div>
+          <div class="row">
+            <md-outlined-text-field id="logoRadius" label="Border radius" type="number" value="8"></md-outlined-text-field>
+          </div>
+          <div class="row">
+            <input type="file" id="logoFile" accept="image/*" style="display:none;" />
+            <md-outlined-button id="btnUploadLogo" type="button">Upload logo</md-outlined-button>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="groupTitle">Size</div>
+          <md-outlined-select id="sizePreset" label="Size preset">
+            <md-select-option value="128">128</md-select-option>
+            <md-select-option selected value="256">256</md-select-option>
+            <md-select-option value="512">512</md-select-option>
+            <md-select-option value="1024">1024</md-select-option>
+            <md-select-option value="custom">Custom</md-select-option>
+          </md-outlined-select>
+          <div class="row">
+            <md-outlined-text-field id="customSize" label="Custom size (px)" type="number" value="256"></md-outlined-text-field>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="groupTitle">Frame</div>
+          <div class="row">
+            <md-switch id="frameEnabled"></md-switch>
+            <div class="labelCol">
+              <div class="label">Enable frame</div>
+            </div>
+          </div>
+          <div class="row">
+            <md-outlined-text-field id="frameThickness" label="Thickness" type="number" value="14"></md-outlined-text-field>
+            <md-outlined-text-field id="frameColor" label="Color" value="#111111" type="color"></md-outlined-text-field>
+          </div>
         </div>
       </section>
 
