@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "QR Generator (MD3)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate customizable QR codes from the active tab, custom input, or context menu.",
   "action": {
     "default_title": "QR Generator",

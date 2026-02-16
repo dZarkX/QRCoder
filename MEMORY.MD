@@ -11,7 +11,7 @@ UI uses Material Design 3.
 !For Design details - see SKILL.md!
 
 ## Current Version
-0.1.0
+0.1.1
 
 ## Version History
 - 0.1.0
@@ -91,7 +91,7 @@ UI uses Material Design 3.
 ## User Preferences and Feedback
 - Must use Material Design 3 for all UI.
 - Must keep modular architecture under `/src`.
-- Must maintain `MEMORY.MD` and bump MINOR by +0.1 per iteration.
+- Versioning: big feature iterations bump MINOR by +0.1 (e.g. 0.1.0 -> 0.2.0), bugfix-only releases bump PATCH by +0.0.1 (e.g. 0.2.0 -> 0.2.1).
 
 ## Architecture Decisions
 - **Build tool**: Vite, multi-entry output.

@@ -7,6 +7,38 @@
     <link rel="stylesheet" href="/src/options/options.css" />
   </head>
   <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="title">Options</div>
+        <md-filled-button id="btnSave" type="button">Save</md-filled-button>
+      </header>
+
+      <section class="panel">
+        <div class="sectionTitle">Defaults</div>
+
+        <div class="grid2">
+          <md-outlined-text-field id="fg" label="Foreground" value="#111111"></md-outlined-text-field>
+          <md-outlined-text-field id="bg" label="Background" value="#ffffff"></md-outlined-text-field>
+          <md-outlined-text-field id="eyeInner" label="Eye inner" value="#111111"></md-outlined-text-field>
+          <md-outlined-text-field id="eyeOuter" label="Eye outer" value="#111111"></md-outlined-text-field>
+        </div>
+
+        <div class="row">
+          <md-switch id="transparentBg"></md-switch>
+          <div class="labelCol">
+            <div class="label">Transparent background</div>
+            <div class="hint">Use PNG export for transparency.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <md-outlined-text-field id="size" label="Default size (px)" type="number" value="256"></md-outlined-text-field>
+        </div>
+      </section>
+
+      <div id="snackbar" class="snackbar" aria-live="polite"></div>
+    </main>
+
     <script type="module" src="/src/options/options.ts"></script>
   </body>
 </html>
