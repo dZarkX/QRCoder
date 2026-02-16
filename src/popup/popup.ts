@@ -14,6 +14,10 @@ import { consumePendingContext } from '@/popup/context-consume';
 
 const keys = getStorageKeys();
 
+type PopupStateUpdate = Omit<Partial<QrState>, 'settings'> & {
+  settings?: Partial<QrState['settings']>;
+};
+
 function showToast(message: string) {
   const el = qs<HTMLDivElement>(document, '#snackbar');
   el.textContent = message;
@@ -39,6 +43,18 @@ async function loadInitialState(): Promise<QrState> {
   };
 }
 
+function mergeSettings(prev: QrState['settings'], next: Partial<QrState['settings']>): QrState['settings'] {
+  return {
+    ...prev,
+    ...next,
+    colors: { ...prev.colors, ...next.colors },
+    gradient: { ...prev.gradient, ...next.gradient },
+    logo: { ...prev.logo, ...next.logo },
+    size: { ...prev.size, ...next.size },
+    frame: { ...prev.frame, ...next.frame }
+  };
+}
+
 function readFormSettings(): Partial<QrState['settings']> {
   const fg = qs<HTMLInputElement>(document, '#fg').value;
   const bg = qs<HTMLInputElement>(document, '#bg').value;
@@ -46,7 +62,8 @@ function readFormSettings(): Partial<QrState['settings']> {
   const eyeOuter = qs<HTMLInputElement>(document, '#eyeOuter').value;
   const transparentBg = (qs<any>(document, '#transparentBg') as any).selected;
   const dotStyleSelect = qs<any>(document, '#dotStyle');
-  const dotStyle = ['square', 'rounded', 'dots'].includes(dotStyleSelect.value) ? dotStyleSelect.value as QrDotStyle : 'square';
+  const dotStyleValue = (dotStyleSelect as any).value ?? (dotStyleSelect as any).selected;
+  const dotStyle = ['square', 'rounded', 'dots'].includes(dotStyleValue) ? dotStyleValue as QrDotStyle : 'square';
   const gradientEnabled = (qs<any>(document, '#gradientEnabled') as any).selected;
   const gradientRotation = Number(qs<HTMLInputElement>(document, '#gradientRotation').value) || 0;
   const logoEnabled = (qs<any>(document, '#logoEnabled') as any).selected;
@@ -54,7 +71,7 @@ function readFormSettings(): Partial<QrState['settings']> {
   const logoPadding = Number(qs<HTMLInputElement>(document, '#logoPadding').value) || 6;
   const logoRadius = Number(qs<HTMLInputElement>(document, '#logoRadius').value) || 8;
   const sizePresetSelect = qs<any>(document, '#sizePreset');
-  const sizePreset = sizePresetSelect.value;
+  const sizePreset = (sizePresetSelect as any).value ?? (sizePresetSelect as any).selected;
   const customSize = Number(qs<HTMLInputElement>(document, '#customSize').value) || 256;
   const frameEnabled = (qs<any>(document, '#frameEnabled') as any).selected;
   const frameThickness = Number(qs<HTMLInputElement>(document, '#frameThickness').value) || 14;
@@ -80,7 +97,6 @@ function readFormSettings(): Partial<QrState['settings']> {
     },
     logo: {
       enabled: logoEnabled,
-      dataUrl: undefined, // will be set via file upload
       sizePercent: logoSize,
       padding: logoPadding,
       borderRadius: logoRadius
@@ -104,7 +120,7 @@ function writeFormSettings(settings: QrState['settings']) {
   qs<HTMLInputElement>(document, '#eyeOuter').value = settings.colors.eyeOuter;
   (qs<any>(document, '#transparentBg') as any).selected = settings.colors.transparentBackground;
   const dotStyleSelect = qs<any>(document, '#dotStyle');
-  dotStyleSelect.value = settings.dotStyle;
+  (dotStyleSelect as any).value = settings.dotStyle;
   (qs<any>(document, '#gradientEnabled') as any).selected = settings.gradient.enabled;
   qs<HTMLInputElement>(document, '#gradientRotation').value = String(settings.gradient.rotation);
   (qs<any>(document, '#logoEnabled') as any).selected = settings.logo.enabled;
@@ -112,7 +128,7 @@ function writeFormSettings(settings: QrState['settings']) {
   qs<HTMLInputElement>(document, '#logoPadding').value = String(settings.logo.padding);
   qs<HTMLInputElement>(document, '#logoRadius').value = String(settings.logo.borderRadius);
   const sizePresetSelect = qs<any>(document, '#sizePreset');
-  sizePresetSelect.value = settings.size.preset === 'custom' ? 'custom' : String(settings.size.preset);
+  (sizePresetSelect as any).value = settings.size.preset === 'custom' ? 'custom' : String(settings.size.preset);
   qs<HTMLInputElement>(document, '#customSize').value = String(settings.size.customSize);
   (qs<any>(document, '#frameEnabled') as any).selected = settings.frame.enabled;
   qs<HTMLInputElement>(document, '#frameThickness').value = String(settings.frame.thickness);
@@ -128,6 +144,8 @@ async function main() {
   const btnDownloadJpeg = qs<HTMLElement>(document, '#btnDownloadJpeg');
   const btnDownloadWebp = qs<HTMLElement>(document, '#btnDownloadWebp');
   const btnCopy = qs<HTMLElement>(document, '#btnCopy');
+  const btnToggleCustomize = qs<HTMLElement>(document, '#btnToggleCustomize');
+  const customizeDetails = qs<HTMLDetailsElement>(document, '#customizeDetails');
   const btnUploadLogo = qs<HTMLElement>(document, '#btnUploadLogo');
   const logoFile = qs<HTMLInputElement>(document, '#logoFile');
   const inputPayload = qs<HTMLInputElement>(document, '#inputPayload');
@@ -140,12 +158,13 @@ async function main() {
   const generator = new QrGenerator();
   generator.render({ element: qrMount });
 
-  async function generateAndPersist(next: Partial<QrState>) {
+  async function generateAndPersist(next: PopupStateUpdate) {
+    const nextSettings = next.settings ?? readFormSettings();
     const merged: QrState = {
       ...state,
       ...next,
       payload: next.payload ?? inputPayload.value,
-      settings: next.settings ?? { ...state.settings, ...readFormSettings() }
+      settings: mergeSettings(state.settings, nextSettings)
     };
 
     if (!merged.payload.trim()) {
@@ -160,6 +179,23 @@ async function main() {
     state.settings = merged.settings;
   }
 
+  btnToggleCustomize.addEventListener('click', () => {
+    customizeDetails.open = !customizeDetails.open;
+  });
+
+  // Right-click on preview to quickly download
+  // - Right click: PNG
+  // - Shift + Right click: SVG
+  qrMount.addEventListener('contextmenu', async (e) => {
+    e.preventDefault();
+    if (!state.payload.trim()) {
+      showToast('Nothing to download');
+      return;
+    }
+
+    await generator.download(e.shiftKey ? 'svg' : 'png', 'qr');
+  });
+
   // Live updates on any setting change
   const liveInputs = [
     'fg', 'bg', 'eyeInner', 'eyeOuter',
@@ -168,6 +204,15 @@ async function main() {
   ];
   liveInputs.forEach(id => {
     qs<HTMLInputElement>(document, `#${id}`).addEventListener('input', async () => {
+      if (state.payload.trim()) {
+        await generateAndPersist({});
+      }
+    });
+  });
+
+  // Native color inputs often only fire 'change'
+  ['fg', 'bg', 'eyeInner', 'eyeOuter', 'frameColor'].forEach(id => {
+    qs<HTMLInputElement>(document, `#${id}`).addEventListener('change', async () => {
       if (state.payload.trim()) {
         await generateAndPersist({});
       }
@@ -204,7 +249,7 @@ async function main() {
     });
     state.settings.logo.dataUrl = dataUrl;
     if (state.payload.trim()) {
-      await generateAndPersist({});
+      await generateAndPersist({ settings: { logo: { ...state.settings.logo, dataUrl } } });
     }
     showToast('Logo uploaded');
   });

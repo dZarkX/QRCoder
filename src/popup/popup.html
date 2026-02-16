@@ -23,7 +23,7 @@
 
         <div class="row split">
           <md-filled-button id="btnGenerate" type="button">Generate</md-filled-button>
-          <md-outlined-button id="btnOptions" type="button">Options</md-filled-button>
+          <md-outlined-button id="btnOptions" type="button">Options</md-outlined-button>
         </div>
       </section>
 
@@ -32,25 +32,44 @@
           <div id="qrMount" class="qrMount"></div>
         </div>
 
-        <div class="row split">
+        <div class="row wrap">
           <md-outlined-button id="btnDownloadPng" type="button">PNG</md-outlined-button>
           <md-outlined-button id="btnDownloadSvg" type="button">SVG</md-outlined-button>
           <md-outlined-button id="btnDownloadJpeg" type="button">JPEG</md-outlined-button>
           <md-outlined-button id="btnDownloadWebp" type="button">WEBP</md-outlined-button>
           <md-outlined-button id="btnCopy" type="button">Copy</md-outlined-button>
         </div>
+
+        <div class="row">
+          <md-outlined-button id="btnToggleCustomize" type="button">Customize</md-outlined-button>
+        </div>
       </section>
 
-      <section class="panel customize">
-        <div class="sectionTitle">Customize</div>
+      <details id="customizeDetails" class="panel customize">
+        <summary class="customizeSummary">
+          <span class="sectionTitle">Customize</span>
+          <span class="hint">Tip: right-click QR to download PNG (Shift+right-click for SVG)</span>
+        </summary>
 
         <div class="group">
           <div class="groupTitle">Colors</div>
           <div class="grid2">
-            <md-outlined-text-field id="fg" label="Foreground" value="#111111" type="color"></md-outlined-text-field>
-            <md-outlined-text-field id="bg" label="Background" value="#ffffff" type="color"></md-outlined-text-field>
-            <md-outlined-text-field id="eyeInner" label="Eye inner" value="#111111" type="color"></md-outlined-text-field>
-            <md-outlined-text-field id="eyeOuter" label="Eye outer" value="#111111" type="color"></md-outlined-text-field>
+            <label class="colorField">
+              <span class="colorLabel">Foreground</span>
+              <input id="fg" class="colorInput" type="color" value="#111111" />
+            </label>
+            <label class="colorField">
+              <span class="colorLabel">Background</span>
+              <input id="bg" class="colorInput" type="color" value="#ffffff" />
+            </label>
+            <label class="colorField">
+              <span class="colorLabel">Eye inner</span>
+              <input id="eyeInner" class="colorInput" type="color" value="#111111" />
+            </label>
+            <label class="colorField">
+              <span class="colorLabel">Eye outer</span>
+              <input id="eyeOuter" class="colorInput" type="color" value="#111111" />
+            </label>
           </div>
           <div class="row">
             <md-switch id="transparentBg"></md-switch>
@@ -128,10 +147,13 @@
           </div>
           <div class="row">
             <md-outlined-text-field id="frameThickness" label="Thickness" type="number" value="14"></md-outlined-text-field>
-            <md-outlined-text-field id="frameColor" label="Color" value="#111111" type="color"></md-outlined-text-field>
+            <label class="colorField inline">
+              <span class="colorLabel">Color</span>
+              <input id="frameColor" class="colorInput" type="color" value="#111111" />
+            </label>
           </div>
         </div>
-      </section>
+      </details>
 
       <div id="snackbar" class="snackbar" aria-live="polite"></div>
     </main>

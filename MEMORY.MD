@@ -27,6 +27,13 @@ UI uses Material Design 3.
   - **Full QR customization UI**: colors (fg/bg/eye inner/eye outer), transparent bg toggle, shape (square/rounded/dots), gradient (linear, rotation), logo upload (size/padding/radius), size presets (128/256/512/1024/custom), frame (thickness/color). Live updates on any change.
   - **Export formats**: PNG, SVG, JPEG, WEBP; clipboard copy (PNG).
   - **MD3 components**: replaced unsupported segmented-button with md-outlined-select; added select theming.
+  - **Bug fixes / UX**:
+    - Popup layout: fixed invalid closing tag causing layout break.
+    - Settings merge: deep-merge customization settings to avoid losing nested data (e.g., logo image).
+    - Minimalist popup: customization panel is collapsible (`details/summary`) and export buttons wrap.
+    - Right-click download: right-click QR preview downloads PNG; Shift+right-click downloads SVG.
+    - Color pickers: switched to native `<input type="color">` for reliable visibility.
+    - Font: JetBrains Mono is now the primary font for popup + options UI.
 
 ## Completed Features
 - Project scaffolding: `package.json`, `tsconfig.json`, `vite.config.ts`
