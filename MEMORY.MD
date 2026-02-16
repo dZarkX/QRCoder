@@ -21,6 +21,7 @@ UI uses Material Design 3.
   - Fixed Vite alias @ -> src resolution
   - Fixed Vite HTML asset output: flatten to dist root (popup.html, options.html)
   - Build pipeline now produces loadable extension (dist/ ready for chrome://extensions)
+  - **UI/UX overhaul**: improved typography (system font stack), better contrast, modern color palette, shadows, MD3 component theming, consistent spacing, elevated panels, accent colors, better readability in both light/dark modes.
 
 ## Completed Features
 - Project scaffolding: `package.json`, `tsconfig.json`, `vite.config.ts`
@@ -34,20 +35,23 @@ UI uses Material Design 3.
   - Live QR preview (qr-code-styling)
   - Export PNG/SVG
   - Copy PNG to clipboard
+  - **Improved visual design**: modern typography, better contrast, shadows, accent colors, consistent spacing, elevated panels, responsive light/dark theme.
 - Options page (MD3) with:
   - Default colors, transparent bg toggle, default size
+  - **Improved visual design**: same design system as popup, better readability, component theming.
 - Context menu integration:
   - Items: page/link/image
   - Stores pendingContext in chrome.storage.local
   - Popup consumes pendingContext and auto-generates
 - Storage abstraction and defaults module
 - TypeScript strict mode, typed Chrome APIs, typed QR settings
+- **Design System**: shared CSS variables for colors, shadows, spacing; MD3 component theming for buttons, inputs, switches.
 
 ## In-Progress Features
 - Full QR customization UI (colors, eyes, gradient, shape, logo upload, size presets, frame)
 - Export formats: JPEG, WEBP, EPS (optional)
 - Presets and history
-- Git repo init + GitHub push (dZarkX/QRCoder)
+- Fix Vite config to emit HTML to root without manual copy
 
 ## Known Issues
 - Vite assetFileNames logic still nests HTML under dist/src/ during build; manual copy used as workaround.
@@ -56,12 +60,14 @@ UI uses Material Design 3.
 - npm peer dependency conflict: vite-plugin-static-copy required Vite ^5, we used Vite ^6. Solution: removed vite-plugin-static-copy; Vite copies public/ automatically.
 - Rollup could not resolve @/* imports. Solution: added resolve.alias in vite.config.ts.
 - Chrome failed to load extension: HTML files were under dist/src/ instead of dist/. Solution: manual copy; will fix Vite config later.
+- **UI readability**: initial colors and fonts lacked contrast and modern feel. Solution: comprehensive design system overhaul with better typography, colors, shadows, and MD3 theming.
 
 ## Solutions Applied
 - Use Vite multi-entry build with stable output filenames for MV3 (`background.js`, `content.js`).
 - Added @types/chrome and @types/node for full TS support.
 - Added minimal qr-code-styling.d.ts to avoid missing types.
 - Manual copy of HTML to dist root as temporary workaround.
+- **Design System**: introduced CSS custom properties for consistent colors, shadows, spacing; applied MD3 component theming; improved font stack and contrast.
 
 ## User Preferences and Feedback
 - Must use Material Design 3 for all UI.
